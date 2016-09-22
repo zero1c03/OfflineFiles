@@ -1,4 +1,4 @@
-package Adapter;
+package adapter;
 
 /**
  * Created by Weber on 2016/9/21.

@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.weber.qsirch_offlinefiles", appContext.getPackageName());
+        assertEquals("com.options_menu.weber.qsirch_offlinefiles", appContext.getPackageName());
     }
 }

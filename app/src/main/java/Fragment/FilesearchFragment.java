@@ -1,4 +1,4 @@
-package Fragment;
+package fragment;
 
 /**
  * Created by Weber on 2016/9/21.
