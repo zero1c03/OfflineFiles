@@ -3,4 +3,7 @@
     <string name="search">Search</string>
     <string name="search_title">Search</string>
     <string name="search_hint">Search</string>
+    <string name="drawer_open">開啓導航抽屜</string>
+    <string name="drawer_close">關閉導航抽屜</string>
+    <string name="homelayout">HomeLayout</string>
 </resources>
