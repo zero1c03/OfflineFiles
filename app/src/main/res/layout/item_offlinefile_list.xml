@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical">
@@ -29,7 +30,7 @@
 
     <LinearLayout
         android:id="@+id/ItemLayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/ButtonLayout"
@@ -38,7 +39,7 @@
 
         <LinearLayout
             android:id="@+id/linearLayout_MainInfo"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal"
@@ -55,16 +56,17 @@
                 android:scrollHorizontally="true"
                 android:textColor="@android:color/black"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:text="title" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout_SlaveInfo"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="12dip"
-            android:visibility="gone">
+            android:paddingLeft="12dip">
 
             <TextView
                 android:id="@+id/ItemSize"
@@ -87,7 +89,20 @@
                 android:paddingLeft="10dp"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:text="ItemText"
+                android:text="date"
+                android:textColor="#333333"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/ItemTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:paddingLeft="10dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="time"
                 android:textColor="#333333"
                 android:textSize="14dp" />
         </LinearLayout>

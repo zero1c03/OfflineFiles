@@ -6,4 +6,6 @@
     <string name="drawer_open">開啓導航抽屜</string>
     <string name="drawer_close">關閉導航抽屜</string>
     <string name="homelayout">HomeLayout</string>
+    <string name="cantreadfolder">Cannot read folder due to permissions</string>
+    <string name="cantopenfile">Cannot open this file</string>
 </resources>
