@@ -1,14 +1,12 @@
 package adapter;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,13 +14,11 @@ import com.example.weber.qsirch_offlinefiles.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import model.FileSearchModel;
-import utils.SimpleUtils;
+import preview.IconPreview;
 
 import static utils.SimpleUtils.formatCalculatedSize;
 import static utils.SimpleUtils.openFile;
@@ -58,7 +54,6 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 view.requestFocus();
-                Log.d(TAG, "TOUCHED");
                 return false;
             }
         });
@@ -73,8 +68,10 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ListItemViewHolder mListItemViewHolder = (ListItemViewHolder) holder;
         mListItemViewHolder.ItemTitle.setText(mFileSearchModel.getFileName().toString().substring(mFileSearchModel.getFileName().toString().lastIndexOf("/") + 1));
         mListItemViewHolder.ItemSize.setText(formatCalculatedSize(mFileSearchModel.getFileSize()));
-        mListItemViewHolder.ItemText.setText(DateFormatter.format(mFileSearchModel.getFileDate()));
-        mListItemViewHolder.ItemTime.setText(TimeFormatter.format(mFileSearchModel.getFileTime()));
+        mListItemViewHolder.ItemText.setText(DateFormatter.format(mFileSearchModel.getFileModifiedDate()));
+        mListItemViewHolder.ItemTime.setText(TimeFormatter.format(mFileSearchModel.getFileModifiedDate()));
+        // get icon
+        IconPreview.getFileIcon(mFileSearchModel.getFileName(), mListItemViewHolder.listImage);
     }
 
     // If return 0, it will show nothing.
@@ -87,6 +84,7 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (!data.isEmpty())
             data.clear();
         data = files;
+        Collections.sort(data, new DownloadTimeComparator());
         notifyDataSetChanged();
     }
 
@@ -95,7 +93,38 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyDataSetChanged();
     }
 
-    private void sortContent(String sort, int order) {
+    public void sortContent(int order) {
+        switch (order) {
+            case 0:
+                Collections.sort(data, new DownloadTimeComparator());
+                Collections.reverse(data);
+                break;
+            case 1:
+                Collections.sort(data, new DownloadTimeComparator());
+                break;
+            case 2:
+                Collections.sort(data, new FileNameComparator());
+                Collections.reverse(data);
+                break;
+            case 3:
+                Collections.sort(data, new FileNameComparator());
+                break;
+            case 4:
+                Collections.sort(data, new ModifiedDateComparator());
+                Collections.reverse(data);
+                break;
+            case 5:
+                Collections.sort(data, new ModifiedDateComparator());
+                break;
+            case 6:
+                Collections.sort(data, new FileSizeComparator());
+                Collections.reverse(data);
+                break;
+            case 7:
+                Collections.sort(data, new FileSizeComparator());
+                break;
+        }
+        notifyDataSetChanged();
     }
 
     public class ListItemViewHolder extends RecyclerView.ViewHolder {
@@ -119,15 +148,69 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-  public class CustomComparator implements Comparator<FileSearchModel> {
-      @Override
-      public int compare(FileSearchModel t1, FileSearchModel t2) {
-          if(t1.getFileName())
-          return 0;
-      }
-  }
+    public class DownloadTimeComparator implements Comparator<FileSearchModel> {
+        @Override
+        public int compare(FileSearchModel obj1, FileSearchModel obj2) {
+            if (obj1.getFileCreationTime() == obj2.getFileCreationTime()) {
+                return 0;
+            }
+            if (obj1.getFileCreationTime() == null) {
+                return -1;
+            }
+            if (obj2.getFileCreationTime() == null) {
+                return 1;
+            }
+            return obj1.getFileCreationTime().compareTo(obj2.getFileCreationTime());
+        }
+    }
 
+    public class FileNameComparator implements Comparator<FileSearchModel> {
+        @Override
+        public int compare(FileSearchModel obj1, FileSearchModel obj2) {
+            if (obj1.getFileName() == obj2.getFileName()) {
+                return 0;
+            }
+            if (obj1.getFileName() == null) {
+                return -1;
+            }
+            if (obj2.getFileName() == null) {
+                return 1;
+            }
+            return obj1.getFileName().compareTo(obj2.getFileName());
+        }
+    }
 
+    public class ModifiedDateComparator implements Comparator<FileSearchModel> {
+        @Override
+        public int compare(FileSearchModel obj1, FileSearchModel obj2) {
+            if (obj1.getFileModifiedDate() == obj2.getFileModifiedDate()) {
+                return 0;
+            }
+            if (obj1.getFileModifiedDate() == null) {
+                return -1;
+            }
+            if (obj2.getFileModifiedDate() == null) {
+                return 1;
+            }
+            return obj1.getFileModifiedDate().compareTo(obj2.getFileModifiedDate());
+        }
+    }
+
+    public class FileSizeComparator implements Comparator<FileSearchModel> {
+        @Override
+        public int compare(FileSearchModel obj1, FileSearchModel obj2) {
+            if (obj1.getFileSize() == obj2.getFileSize()) {
+                return 0;
+            }
+            if (obj1.getFileSize() == null) {
+                return -1;
+            }
+            if (obj2.getFileSize() == null) {
+                return 1;
+            }
+            return obj1.getFileSize().compareTo(obj2.getFileSize());
+        }
+    }
 }
 
 
