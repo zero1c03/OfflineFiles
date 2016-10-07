@@ -8,4 +8,12 @@
     <string name="homelayout">HomeLayout</string>
     <string name="cantreadfolder">Cannot read folder due to permissions</string>
     <string name="cantopenfile">Cannot open this file</string>
+    <string name="download_time_descending">Download time (Descending)</string>
+    <string name="download_time_ascending">Download time (Ascending)</string>
+    <string name="file_name_descending">File name (Descending)</string>
+    <string name="file_name_ascending">File name (Ascending)</string>
+    <string name="modified_date_descending">Modified date (Descending)</string>
+    <string name="modified_date_ascending">Modified date (Ascending)</string>
+    <string name="file_size_descending">File size (Descending)</string>
+    <string name="file_size_ascending">File size (Ascending)</string>
 </resources>

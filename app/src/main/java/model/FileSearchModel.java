@@ -3,8 +3,6 @@ package model;
 import java.io.File;
 import java.util.Date;
 
-import static utils.SimpleUtils.formatCalculatedSize;
-
 /**
  * Created by Weber on 2016/9/30.
  */
@@ -13,8 +11,8 @@ public class FileSearchModel {
     File fileName;
     String fileType;
     Long fileSize;
-    Date fileDate;
-    Date fileTime;
+    Date fileModifiedDate;
+    Date fileCreationTime;
 
     public File getFileName() {
         return fileName;
@@ -40,20 +38,20 @@ public class FileSearchModel {
         this.fileSize = fileSize;
     }
 
-    public Date getFileDate() {
-        return fileDate;
+    public Date getFileModifiedDate() {
+        return fileModifiedDate;
     }
 
-    public void setFileDate(Date fileDate) {
-        this.fileDate = fileDate;
+    public void setFileModifiedDate(Date fileModifiedDate) {
+        this.fileModifiedDate = fileModifiedDate;
     }
 
-    public Date getFileTime() {
-        return fileTime;
+    public Date getFileCreationTime() {
+        return fileCreationTime;
     }
 
-    public void setFileTime(Date fileTime) {
-        this.fileTime = fileTime;
+    public void setFileCreationTime(Date fileCreationTime) {
+        this.fileCreationTime = fileCreationTime;
     }
 }
 

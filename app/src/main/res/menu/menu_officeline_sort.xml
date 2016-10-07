@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <item
+        android:id="@+id/DownloadTimeDescending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/download_time_descending" />
+
+    <item
+        android:id="@+id/DownloadTimeAscending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/download_time_ascending" />
+
+    <item
+        android:id="@+id/FileNameDescending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/file_name_descending" />
+
+    <item
+        android:id="@+id/FileNameAscending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/file_name_ascending" />
+
+    <item
+        android:id="@+id/ModifiedDateDescending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/modified_date_descending" />
+
+    <item
+        android:id="@+id/ModifiedDateAscending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/modified_date_ascending" />
+
+    <item
+        android:id="@+id/FileSizeDescending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/file_size_descending" />
+
+    <item
+        android:id="@+id/FileSizeAscending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/file_size_ascending" />
+</menu>
