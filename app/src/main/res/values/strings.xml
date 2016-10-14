@@ -16,4 +16,10 @@
     <string name="modified_date_ascending">Modified date (Ascending)</string>
     <string name="file_size_descending">File size (Descending)</string>
     <string name="file_size_ascending">File size (Ascending)</string>
+    <string name="open_file">Open</string>
+    <string name="str_open_in">Open in others apps</string>
+    <string name="share_link">Share directly</string>
+    <string name="details">Details</string>
+    <string name="delete">Delete</string>
+    <string name="function">Functions</string>
 </resources>

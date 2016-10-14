@@ -1,13 +1,17 @@
 package adapter;
 
 import android.content.Context;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.weber.qsirch_offlinefiles.R;
@@ -17,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import fragment.FilesearchFragment;
 import model.FileSearchModel;
 import preview.IconPreview;
 
@@ -33,23 +38,28 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     ArrayList<? extends FileSearchModel> data;
     ArrayList<Integer> selectedPositions;
     Context mContext;
+    FilesearchFragment filesearchFragment;
 
-    public FileSearchAdapter(Context context) {
+    public FileSearchAdapter(Context context, FilesearchFragment filesearchFragment) {
         data = new ArrayList<>();
         selectedPositions = new ArrayList<>();
         mContext = context;
+        this.filesearchFragment = filesearchFragment;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_offlinefile_list, parent, false);
+        RelativeLayout clickableRelativeLayout = (RelativeLayout) view.findViewById(R.id.clickableRelativeLayout);
+        LinearLayout clickableLinearLayout = (LinearLayout)view.findViewById(R.id.ButtonLayout);
+
         final ListItemViewHolder vh = new ListItemViewHolder(view);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openFile(mContext, data.get(vh.getAdapterPosition()).getFileName());
-            }
-        });
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openFile(mContext, data.get(vh.getAdapterPosition()).getFileName());
+//            }
+//        });
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -57,6 +67,21 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 return false;
             }
         });
+
+        clickableRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFile(mContext, data.get(vh.getAdapterPosition()).getFileName());
+            }
+        });
+
+        clickableLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filesearchFragment.OpenDrawer();
+            }
+        });
+
         return vh;
     }
 

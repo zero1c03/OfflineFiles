@@ -27,4 +27,7 @@
     <!-- properties container height -->
     <dimen name="container_height">265dp</dimen>
 
+    <dimen name="preference_item_padding_side">8dip</dimen>
+    <dimen name="preference_item_padding_inner">8dip</dimen>
+
 </resources>

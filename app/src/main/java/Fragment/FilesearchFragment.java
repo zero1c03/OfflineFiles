@@ -10,11 +10,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,6 +46,7 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
 
     public static String TAG = "FilesearchFragment";
     private Context context;
+
     private ArrayList<FileSearchModel> mDatas;
 
     private FileSearchAdapter mAdapter;
@@ -52,6 +56,10 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
     private RecyclerView mRecyclerView;
     private TextView mSortType;
 
+    private DrawerLayout mDrawerLayout;
+
+    private FilesearchFragment filesearchFragment = this;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +68,7 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View DrawerView = inflater.inflate(R.layout.file_details_view, container, false);
         // Get the intent, verify the action and get the query
         View rootView = inflater.inflate(R.layout.fragment_filesearch, container, false);
 
@@ -71,13 +80,16 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
         mLinearLayoutManager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mAdapter = new FileSearchAdapter(context);
+        mAdapter = new FileSearchAdapter(context, filesearchFragment);
         mRecyclerView.setAdapter(mAdapter);
 
         mSortButton = (ImageView) rootView.findViewById(R.id.sortbutton);
         mSortButton.setOnClickListener(this);
 
         mSortType = (TextView) rootView.findViewById(R.id.sortType);
+
+        //Drawview
+        mDrawerLayout = (DrawerLayout) DrawerView.findViewById(R.id.fileDetailsDrawerLayout);
 
         new IconPreview(context);
         // To define new OptionMenu for fragment.
@@ -240,6 +252,10 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
                 mDivider.draw(c);
             }
         }
+    }
+
+    public void OpenDrawer() {
+        mDrawerLayout.openDrawer(Gravity.RIGHT);
     }
 }
 

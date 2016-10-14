@@ -49,9 +49,11 @@ public class SimpleUtils {
 
                 if (check.isFile() && name.toLowerCase().contains(fileName.toLowerCase())) {
                     n.add(check.getPath());
-                } else if (check.isDirectory()) {
+                }
+
+                else if (check.isDirectory()) {
                     if (name.toLowerCase().contains(fileName.toLowerCase())) {
-                        n.add(check.getPath());
+                        //n.add(check.getPath());
 
                         // change this!
                     } else if (check.canRead() && !dir.equals("/")) {

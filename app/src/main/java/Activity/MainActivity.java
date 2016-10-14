@@ -27,11 +27,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private Context context;
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList; // 左邊選單List
+    private ListView mDrawerList;               // 左邊選單List
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private CharSequence mDrawerTitle; // 抽屜 title
-    private CharSequence mTitle; // Activity title
+    private CharSequence mDrawerTitle;          // 抽屜 title
+    private CharSequence mTitle;                // Activity title
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +50,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         // 將導航抽屜選單作用在ActionBar上
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Remove the title text from the Android ActionBar
+        // Remove the title text from the Android ActionBar
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // 設定 ActionBarDrawerToggle
         mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* 主要 Activity */
-                mDrawerLayout,         /* DrawerLayout xml */
-                R.string.drawer_open,  /* 開啓抽屜簡述 */
-                R.string.drawer_close  /* 關閉抽屜簡述 */
+                this,                       /* 主要 Activity */
+                mDrawerLayout,              /* DrawerLayout xml */
+                R.string.drawer_open,        /* 開啓抽屜簡述 */
+                R.string.drawer_close         /* 關閉抽屜簡述 */
         ) {
             public void onDrawerClosed(View view) {
                 // 設定 action bar title

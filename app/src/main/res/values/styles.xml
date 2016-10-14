@@ -8,4 +8,27 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ListItemTextSecondary">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">@color/text_color_secondary</item>
+    </style>
+
+    <style name="ListItemTextSecondary.Marquee" parent="ListItemTextSecondary">
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <!-- File Details -->
+    <style name="FileDetailsListItem" parent="ListItemTextSecondary.Marquee">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">?attr/listPreferredItemHeightSmall</item>
+        <!--<item name="android:background">@drawable/hd_list_selector</item>-->
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:paddingLeft">@dimen/preference_item_padding_inner</item>
+        <item name="android:paddingRight">@dimen/preference_item_padding_inner</item>
+    </style>
+
 </resources>
