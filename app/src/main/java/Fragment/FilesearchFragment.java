@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.weber.qsirch_offlinefiles.R;
@@ -68,7 +69,7 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View DrawerView = inflater.inflate(R.layout.file_details_view, container, false);
+        View DrawerView = inflater.inflate(R.layout.activity_nas_file_list, container, false);
         // Get the intent, verify the action and get the query
         View rootView = inflater.inflate(R.layout.fragment_filesearch, container, false);
 
@@ -89,7 +90,7 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
         mSortType = (TextView) rootView.findViewById(R.id.sortType);
 
         //Drawview
-        mDrawerLayout = (DrawerLayout) DrawerView.findViewById(R.id.fileDetailsDrawerLayout);
+        mDrawerLayout = (DrawerLayout) DrawerView.findViewById(R.id.drawer_layout_container);
 
         new IconPreview(context);
         // To define new OptionMenu for fragment.
@@ -255,7 +256,8 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
     }
 
     public void OpenDrawer() {
-        mDrawerLayout.openDrawer(Gravity.RIGHT);
+        mDrawerLayout.openDrawer(GravityCompat.END);
     }
+
 }
 
