@@ -18,7 +18,7 @@ import android.widget.ListView;
 
 import com.example.weber.qsirch_offlinefiles.R;
 
-import adapter.DrawerAdapter;
+import adapter.drawerAdapter;
 import fragment.FilesearchFragment;
 import fragment.HomeFragment;
 
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         // 設定 mDrawerList's Adapter listener
         mDrawerList.setAdapter(new ArrayAdapter<String>(context,
-                R.layout.item_drawer, DrawerAdapter.functionName));
+                R.layout.item_drawer, drawerAdapter.functionName));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // 將導航抽屜選單作用在ActionBar上
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         // 設定是否要表現出項目被選定的樣式
         mDrawerList.setItemChecked(position, true);
         // 設定 Activity title
-        setTitle(DrawerAdapter.functionName[position]);
+        setTitle(drawerAdapter.functionName[position]);
         // 關閉抽屜
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }

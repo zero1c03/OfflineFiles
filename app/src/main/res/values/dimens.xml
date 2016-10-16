@@ -30,4 +30,6 @@
     <dimen name="preference_item_padding_side">8dip</dimen>
     <dimen name="preference_item_padding_inner">8dip</dimen>
 
+    <dimen name="left_drawer_container_width">320dip</dimen>
+
 </resources>
