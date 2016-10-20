@@ -14,6 +14,16 @@ public class FileSearchModel {
     Date fileModifiedDate;
     Date fileCreationTime;
 
+    public String getFileOpenProgram() {
+        return fileOpenProgram;
+    }
+
+    public void setFileOpenProgram(String fileOpenProgram) {
+        this.fileOpenProgram = fileOpenProgram;
+    }
+
+    String fileOpenProgram;
+
     public File getFileName() {
         return fileName;
     }

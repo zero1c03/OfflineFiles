@@ -11,6 +11,7 @@ import android.support.v4.provider.DocumentFile;
 import android.widget.Toast;
 
 import preview.MimeTypes;
+
 import com.example.weber.qsirch_offlinefiles.BuildConfig;
 import com.example.weber.qsirch_offlinefiles.R;
 
@@ -49,9 +50,7 @@ public class SimpleUtils {
 
                 if (check.isFile() && name.toLowerCase().contains(fileName.toLowerCase())) {
                     n.add(check.getPath());
-                }
-
-                else if (check.isDirectory()) {
+                } else if (check.isDirectory()) {
                     if (name.toLowerCase().contains(fileName.toLowerCase())) {
                         //n.add(check.getPath());
 
@@ -79,7 +78,7 @@ public class SimpleUtils {
 
             // add files/folder to ArrayList depending on hidden status
             for (String aList : list) {
-                    mDirContent.add(path + "/" + aList);
+                mDirContent.add(path + "/" + aList);
             }
         }
         return mDirContent;
@@ -156,12 +155,51 @@ public class SimpleUtils {
 
             if (mime != null) {
                 intent.setDataAndType(contentUri, mime);
+
             } else {
                 intent.setDataAndType(contentUri, "*/*");
             }
         } else {
             if (mime != null) {
                 intent.setDataAndType(Uri.fromFile(target), mime);
+            } else {
+                intent.setDataAndType(Uri.fromFile(target), "*/*");
+            }
+        }
+
+        if (context.getPackageManager().queryIntentActivities(intent, 0).isEmpty()) {
+            Toast.makeText(context, R.string.cantopenfile, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(context, context.getString(R.string.cantopenfile) + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void openFile(final Context context, final File target, final String openfileprogram) {
+        final String mime = MimeTypes.getMimeType(target);
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", target);
+            intent.setDataAndType(contentUri, mime);
+
+            if (mime != null) {
+                intent.setDataAndType(contentUri, mime);
+                intent.setPackage(openfileprogram);
+            } else {
+                intent.setDataAndType(contentUri, "*/*");
+            }
+        } else {
+            if (mime != null) {
+                intent.setDataAndType(Uri.fromFile(target), mime);
+                intent.setPackage(openfileprogram);
             } else {
                 intent.setDataAndType(Uri.fromFile(target), "*/*");
             }

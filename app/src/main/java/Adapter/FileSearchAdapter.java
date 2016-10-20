@@ -16,11 +16,15 @@ import android.widget.TextView;
 
 import com.example.weber.qsirch_offlinefiles.R;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
+import activity.MainActivity;
 import fragment.FilesearchFragment;
 import model.FileSearchModel;
 import preview.IconPreview;
@@ -51,15 +55,11 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_offlinefile_list, parent, false);
         RelativeLayout clickableRelativeLayout = (RelativeLayout) view.findViewById(R.id.clickableRelativeLayout);
-        LinearLayout clickableLinearLayout = (LinearLayout)view.findViewById(R.id.ButtonLayout);
+        LinearLayout clickableLinearLayout = (LinearLayout) view.findViewById(R.id.ButtonLayout);
 
         final ListItemViewHolder vh = new ListItemViewHolder(view);
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                openFile(mContext, data.get(vh.getAdapterPosition()).getFileName());
-//            }
-//        });
+
+        // RequestFocus.
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -68,17 +68,19 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
         });
 
+        // Directly click to open file.
         clickableRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFile(mContext, data.get(vh.getAdapterPosition()).getFileName());
+                openFile(mContext, data.get(vh.getAdapterPosition()).getFileName(), data.get(vh.getAdapterPosition()).getFileOpenProgram());
             }
         });
 
+        // ItemImage OnClickListener
         clickableLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filesearchFragment.OpenDrawer();
+                filesearchFragment.OpenDrawer(mContext, data.get(vh.getAdapterPosition()));
             }
         });
 
@@ -105,6 +107,29 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return data.size();
     }
 
+    // Init search item view holder.
+    public class ListItemViewHolder extends RecyclerView.ViewHolder {
+        public View mView;
+        public TextView ItemTitle;
+        public TextView ItemSize;
+        public TextView ItemText;
+        public TextView ItemTime;
+        public ImageView listImage;
+        public ImageView ItemImage;
+
+        public ListItemViewHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
+            ItemTitle = (TextView) itemView.findViewById(R.id.ItemTitle);
+            ItemSize = (TextView) itemView.findViewById(R.id.ItemSize);
+            ItemText = (TextView) itemView.findViewById(R.id.ItemText);
+            ItemTime = (TextView) itemView.findViewById(R.id.ItemTime);
+            listImage = (ImageView) itemView.findViewById(R.id.listImage);
+            ItemImage = (ImageView) itemView.findViewById(R.id.ItemImage);
+        }
+    }
+
+    // Operate search file list.
     public void addContent(ArrayList<? extends FileSearchModel> files) {
         if (!data.isEmpty())
             data.clear();
@@ -113,11 +138,27 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyDataSetChanged();
     }
 
+    // Clear search file recyclerView.
     public void clearContent() {
         data.clear();
         notifyDataSetChanged();
     }
 
+    // Delete file.
+    public void deleteContent(File file) {
+        for (int a = 0; a < data.size(); a++) {
+            if (data.get(a).getFileName().equals(file)) {
+                if (file.exists()) {
+                    data.get(a).getFileName().delete();
+                }
+                data.remove(a);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+
+    // For file sorting.
     public void sortContent(int order) {
         switch (order) {
             case 0:
@@ -150,27 +191,6 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 break;
         }
         notifyDataSetChanged();
-    }
-
-    public class ListItemViewHolder extends RecyclerView.ViewHolder {
-        public View mView;
-        public TextView ItemTitle;
-        public TextView ItemSize;
-        public TextView ItemText;
-        public TextView ItemTime;
-        public ImageView listImage;
-        public ImageView ItemImage;
-
-        public ListItemViewHolder(View itemView) {
-            super(itemView);
-            mView = itemView;
-            ItemTitle = (TextView) itemView.findViewById(R.id.ItemTitle);
-            ItemSize = (TextView) itemView.findViewById(R.id.ItemSize);
-            ItemText = (TextView) itemView.findViewById(R.id.ItemText);
-            ItemTime = (TextView) itemView.findViewById(R.id.ItemTime);
-            listImage = (ImageView) itemView.findViewById(R.id.listImage);
-            ItemImage = (ImageView) itemView.findViewById(R.id.ItemImage);
-        }
     }
 
     public class DownloadTimeComparator implements Comparator<FileSearchModel> {

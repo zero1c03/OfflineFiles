@@ -23,4 +23,6 @@
     <color name="text_color_secondary">#666666</color>
     <drawable name="divider_list_item">#E5E5E5</drawable>
 
+    <color name="background_default_color">@android:color/white</color>
+
 </resources>

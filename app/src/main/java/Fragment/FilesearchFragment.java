@@ -4,6 +4,10 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -16,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,7 +38,9 @@ import com.example.weber.qsirch_offlinefiles.R;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import activity.MainActivity;
 import adapter.FileSearchAdapter;
 import model.FileSearchModel;
 import preview.IconPreview;
@@ -47,29 +54,32 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
 
     public static String TAG = "FilesearchFragment";
     private Context context;
-
-    private ArrayList<FileSearchModel> mDatas;
+    private FilesearchFragment filesearchFragment = this;
+    private RecyclerView mRecyclerView;
 
     private FileSearchAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
+    private ArrayList<FileSearchModel> mDatas;
+
     private ImageView mSortButton;
-    private RecyclerView mRecyclerView;
     private TextView mSortType;
 
-    private DrawerLayout mDrawerLayout;
-
-    private FilesearchFragment filesearchFragment = this;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View DrawerView = inflater.inflate(R.layout.activity_nas_file_list, container, false);
         // Get the intent, verify the action and get the query
         View rootView = inflater.inflate(R.layout.fragment_filesearch, container, false);
 
@@ -88,9 +98,6 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
         mSortButton.setOnClickListener(this);
 
         mSortType = (TextView) rootView.findViewById(R.id.sortType);
-
-        //Drawview
-        mDrawerLayout = (DrawerLayout) DrawerView.findViewById(R.id.drawer_layout_container);
 
         new IconPreview(context);
         // To define new OptionMenu for fragment.
@@ -179,7 +186,8 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    protected void AddData(String filepath) {
+    // Add search data.
+    protected void AddData(String filepath, String openfiletype, String belongwhitchapp) {
         FileSearchModel dataModel = new FileSearchModel();
         File file = new File(filepath);
         Date lastModate = new Date(file.lastModified());
@@ -189,11 +197,13 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
         dataModel.setFileSize((file.length()));
         dataModel.setFileModifiedDate(lastModate);
         dataModel.setFileCreationTime(lastModate);
+        dataModel.setFileOpenProgram(openfiletype);
 
         mDatas.add(dataModel);
     }
 
-    private class SearchTask extends AsyncTask<String, Void, ArrayList<String>> {
+    // Search AsyncTask.
+    private class SearchTask extends AsyncTask<String, Void, ArrayList<String[]>> {
         private ProgressDialog pr_dialog;
         private final Context context;
 
@@ -210,17 +220,29 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
         }
 
         @Override
-        protected ArrayList<String> doInBackground(String... params) {
-            String location = Environment.getExternalStorageDirectory().toString();
-            return SimpleUtils.searchInDirectory(location, params[0]);
+        protected ArrayList<String[]> doInBackground(String... params) {
+            ArrayList<String[]> QnapApp = CheckQnapApp();
+            ArrayList<String> SearchArray = new ArrayList<>();
+            ArrayList<String[]> SearchResult = new ArrayList<>();
+
+            for (int app = 0; app < QnapApp.size(); app++) {
+                String location = Environment.getExternalStorageDirectory().toString() + "/" + QnapApp.get(app)[0];
+                SearchArray = SimpleUtils.searchInDirectory(location, params[0]);
+
+                for (int searchresult = 0; searchresult < SearchArray.size(); searchresult++) {
+                    String[] file = {QnapApp.get(app)[0], QnapApp.get(app)[1], SearchArray.get(searchresult)};
+                    SearchResult.add(file);
+                }
+            }
+            return SearchResult;
         }
 
         @Override
-        protected void onPostExecute(final ArrayList<String> files) {
+        protected void onPostExecute(final ArrayList<String[]> files) {
             int len = files != null ? files.size() : 0;
             mDatas = new ArrayList<>();
             for (int i = 0; i < len; i++) {
-                AddData(files.get(i));
+                AddData(files.get(i)[2], files.get(i)[1], files.get(i)[0]);
             }
             mAdapter.addContent(mDatas);
             mAdapter.sortContent(0);
@@ -229,6 +251,7 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    // RecyclerView Divider Item Decoration.
     public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
         private Drawable mDivider;
 
@@ -255,8 +278,46 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    public void OpenDrawer() {
-        mDrawerLayout.openDrawer(GravityCompat.END);
+    // Open right Drawer
+    public void OpenDrawer(final Context context, final FileSearchModel fileSearchModel) {
+        ((MainActivity) getActivity()).OpenDrawer(context, fileSearchModel);
+    }
+
+    // Left drawer Delete button, Activity(DeleteButton) -> FilesearchFragment(deleteFile) -> FileSearchAdapter(deleteContent)
+    public void deleteFile(File file) {
+        mAdapter.deleteContent(file);
+    }
+
+    // Scan Qnap app
+    public ArrayList<String[]> CheckQnapApp() {
+        ArrayList<String[]> QnapApp = new ArrayList<>();
+        String[] QNAPFileName = {"Qfile", "Qmusic", "Qvideo", "Qphoto"};
+        String[] QNAPPackageName = {"com.qnap.qfile", "com.qnap.qmusic", "com.qnap.qvideo", "com.qnap.qphoto", "com.qnap.qmarket"};
+        PackageManager packageManager = getActivity().getPackageManager();
+
+
+        for (int app = 0; app < QNAPPackageName.length; app++) {
+            try {
+                boolean bExists = false;
+                final List<PackageInfo> packs = getActivity().getPackageManager().getInstalledPackages(0);
+                for (int i = 0; i < packs.size(); ++i) {
+                    final String packageName = packs.get(i).packageName;
+                    if (packageName != null && packageName.startsWith(QNAPPackageName[app])) {
+                        bExists = true;
+                        break;
+                    }
+                }
+                if (!bExists) {
+                    // not exists
+                } else {
+                    String[] QnapAppSet = {QNAPFileName[app], QNAPPackageName[app]};
+                    QnapApp.add(QnapAppSet);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return QnapApp;
     }
 
 }
