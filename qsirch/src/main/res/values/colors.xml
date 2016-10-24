@@ -24,5 +24,6 @@
     <drawable name="divider_list_item">#E5E5E5</drawable>
 
     <color name="background_default_color">@android:color/white</color>
+    <color name="nav_drawer_background">#FF383838</color>
 
 </resources>

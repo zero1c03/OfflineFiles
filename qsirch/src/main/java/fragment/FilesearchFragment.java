@@ -44,7 +44,9 @@ import activity.MainActivity;
 import adapter.FileSearchAdapter;
 import model.FileSearchModel;
 import preview.IconPreview;
+import utils.QnapAppFolder;
 import utils.SimpleUtils;
+import com.qnap.medialibrary.video.VideoActivity;
 
 /**
  * Created by Weber on 2016/9/21.
@@ -53,6 +55,7 @@ import utils.SimpleUtils;
 public class FilesearchFragment extends Fragment implements View.OnClickListener {
 
     public static String TAG = "FilesearchFragment";
+    private QnapAppFolder qnapAppFolder;
     private Context context;
     private FilesearchFragment filesearchFragment = this;
     private RecyclerView mRecyclerView;
@@ -65,6 +68,9 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
     private ImageView mSortButton;
     private TextView mSortType;
 
+    public FilesearchFragment() {
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -197,7 +203,7 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
         dataModel.setFileSize((file.length()));
         dataModel.setFileModifiedDate(lastModate);
         dataModel.setFileCreationTime(lastModate);
-        dataModel.setFileOpenProgram(openfiletype);
+        dataModel.setFileApp(openfiletype);
 
         mDatas.add(dataModel);
     }

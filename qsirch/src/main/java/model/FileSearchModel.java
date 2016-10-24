@@ -10,19 +10,10 @@ import java.util.Date;
 public class FileSearchModel {
     File fileName;
     String fileType;
+    String fileApp;
     Long fileSize;
     Date fileModifiedDate;
     Date fileCreationTime;
-
-    public String getFileOpenProgram() {
-        return fileOpenProgram;
-    }
-
-    public void setFileOpenProgram(String fileOpenProgram) {
-        this.fileOpenProgram = fileOpenProgram;
-    }
-
-    String fileOpenProgram;
 
     public File getFileName() {
         return fileName;
@@ -38,6 +29,14 @@ public class FileSearchModel {
 
     public void setFileType(String fileType) {
         this.fileType = fileType;
+    }
+
+    public String getFileApp() {
+        return fileApp;
+    }
+
+    public void setFileApp(String fileApp) {
+        this.fileApp = fileApp;
     }
 
     public Long getFileSize() {
@@ -64,4 +63,3 @@ public class FileSearchModel {
         this.fileCreationTime = fileCreationTime;
     }
 }
-

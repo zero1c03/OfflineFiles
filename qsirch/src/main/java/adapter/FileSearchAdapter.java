@@ -72,7 +72,7 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         clickableRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFile(mContext, data.get(vh.getAdapterPosition()).getFileName(), data.get(vh.getAdapterPosition()).getFileOpenProgram());
+                openFile(mContext, data.get(vh.getAdapterPosition()).getFileName(), data.get(vh.getAdapterPosition()).getFileApp());
             }
         });
 
@@ -156,7 +156,6 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
         notifyDataSetChanged();
     }
-
 
     // For file sorting.
     public void sortContent(int order) {
