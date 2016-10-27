@@ -3,6 +3,7 @@ package preview;
 import android.webkit.MimeTypeMap;
 
 import com.example.weber.qsirch_offlinefiles.R;
+
 import utils.SimpleUtils;
 
 import java.io.File;
@@ -12,7 +13,8 @@ import java.util.regex.Pattern;
 
 public final class MimeTypes {
 
-    private MimeTypes() {}
+    private MimeTypes() {
+    }
 
     private static final HashMap<String, Integer> EXT_ICONS = new HashMap<>();
     private static final HashMap<String, String> MIME_TYPES = new HashMap<>();
@@ -323,8 +325,8 @@ public final class MimeTypes {
             }
         }
 
-        if(type == null)
-            type="*/*";
+        if (type == null)
+            type = "*/*";
         return type;
     }
 
@@ -340,5 +342,10 @@ public final class MimeTypes {
     public static boolean isVideo(File f) {
         final String mime = getMimeType(f);
         return mime != null && mimeTypeMatch("video/*", mime);
+    }
+
+    public static boolean isaudio(File f) {
+        final String mime = getMimeType(f);
+        return mime != null && mimeTypeMatch("audio/*", mime);
     }
 }

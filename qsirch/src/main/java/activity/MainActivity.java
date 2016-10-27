@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -24,12 +25,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.weber.qsirch_offlinefiles.BuildConfig;
 import com.example.weber.qsirch_offlinefiles.R;
 
 import utils.Constants;
 import utils.QnapAppFolder;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import adapter.drawerAdapter;
 import fragment.FilesearchFragment;
@@ -57,21 +62,21 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence mDrawerTitle;          // 抽屜 title
     private CharSequence mTitle;                // Activity title
 
+    private HashMap<String, String> QnapAppFolder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
-        qnapAppFolder = new QnapAppFolder();
-
+        QnapAppFolder = new HashMap<String, String>();
         SetLayout(context, savedInstanceState);
-        SetBroadcast();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        SetBroadcast();
     }
 
     @Override
@@ -196,6 +201,9 @@ public class MainActivity extends AppCompatActivity {
     private void SetBroadcast() {
         String message = "Send BroadCast";
         Intent intent = new Intent(Constants.BROADST_GET_QFILE_DOWNLOADFOLDER);
+        if (Build.VERSION.SDK_INT >= 12) {
+            intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        }
         sendBroadcast(intent);
 
         QfileFolderRecever = new GetQfileFolderRecever();
@@ -209,14 +217,16 @@ public class MainActivity extends AppCompatActivity {
 //        sendBroadcast(intent1);
     }
 
-    // Qfile Folder Revever
+    // Qfile Folder Broadcast Revever
     public class GetQfileFolderRecever extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = "get Qfile folder : ";
-            qnapAppFolder.setQfile(intent.getStringExtra("appDownloadFolderPath"));
-            // Add Toast.
-            Toast.makeText(context, message + qnapAppFolder.getQfile(), Toast.LENGTH_SHORT).show();
+            if (intent.getStringExtra("appDownloadFolderPath") != null) {
+                QnapAppFolder.put(Constants.Qfile, intent.getStringExtra("appDownloadFolderPath"));
+                // Add Toast.
+                Toast.makeText(context, message + intent.getStringExtra("appDownloadFolderPath"), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -249,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 args = new Bundle();
                 args.putInt("position", position);
+                args.putSerializable("QnapAppFolder", QnapAppFolder);
                 mSearchFragment = new FilesearchFragment();
                 mSearchFragment.setArguments(args);
 

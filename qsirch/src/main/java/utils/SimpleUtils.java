@@ -14,6 +14,11 @@ import preview.MimeTypes;
 
 import com.example.weber.qsirch_offlinefiles.BuildConfig;
 import com.example.weber.qsirch_offlinefiles.R;
+import com.qnap.medialibrary.model.MultiMediaInfo;
+import com.qnap.medialibrary.multimedia.MultiMediaViewPagerActivity;
+import com.qnap.medialibrary.video.VideoActivity;
+
+import org.videolan.libvlc.util.MediaInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -148,7 +153,7 @@ public class SimpleUtils {
 
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", target);
             intent.setDataAndType(contentUri, mime);
@@ -185,7 +190,7 @@ public class SimpleUtils {
 
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", target);
             intent.setDataAndType(contentUri, mime);
@@ -216,6 +221,38 @@ public class SimpleUtils {
             Toast.makeText(context, context.getString(R.string.cantopenfile) + e.getMessage(),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static void openFileWithMMM(final Context context, final File target) {
+        ArrayList<MultiMediaInfo> mediaList = new ArrayList<MultiMediaInfo>();
+        final String mime = MimeTypes.getMimeType(target);
+        boolean isImage = MimeTypes.isPicture(target);
+        boolean isVideo = MimeTypes.isVideo(target);
+        boolean isAudio = MimeTypes.isaudio(target);
+        // boolean isApk = target.getName().endsWith(".apk");
+        if (isImage == true) {
+            MultiMediaInfo PhotoMedia = new MultiMediaInfo();
+            PhotoMedia.type = MultiMediaInfo.TYPE_PHOTO;
+            PhotoMedia.photoUrl = target.getPath();
+            PhotoMedia.photoTitle = target.getName();
+            mediaList.add(PhotoMedia);
+//            VideoActivity.start(context, target.getPath(), target.getName());
+        } else if (isVideo == true) {
+            MultiMediaInfo VideoMedia = new MultiMediaInfo();
+            VideoMedia.type = MultiMediaInfo.TYPE_VIDEO;
+            VideoMedia.media = new MediaInfo(target.toString(), "", "", target.getName(), "http://blogs-images.forbes.com/olliebarder/files/2015/06/dragon_ball_super_logo.jpg");
+            mediaList.add(VideoMedia);
+//            VideoActivity.start(context, target.getPath(), target.getName());
+        } else if (isAudio == true) {
+            MultiMediaInfo AudioMedia = new MultiMediaInfo();
+            AudioMedia.type = MultiMediaInfo.TYPE_AUDIO;
+            AudioMedia.media = new MediaInfo(target.toString(), "", "", target.getName(), "http://blogs-images.forbes.com/olliebarder/files/2015/06/dragon_ball_super_logo.jpg");
+            mediaList.add(AudioMedia);
+//            VideoActivity.start(context, target.getPath(), target.getName());
+        } else {
+
+        }
+        MultiMediaViewPagerActivity.start(context, mediaList, 0);
     }
 
     // get MD5 or SHA1 checksum from a file

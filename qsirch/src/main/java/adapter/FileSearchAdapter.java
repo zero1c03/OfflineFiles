@@ -28,9 +28,11 @@ import activity.MainActivity;
 import fragment.FilesearchFragment;
 import model.FileSearchModel;
 import preview.IconPreview;
+import utils.Constants;
 
 import static utils.SimpleUtils.formatCalculatedSize;
 import static utils.SimpleUtils.openFile;
+import static utils.SimpleUtils.openFileWithMMM;
 
 /**
  * Created by Weber on 2016/9/21.
@@ -72,7 +74,10 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         clickableRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFile(mContext, data.get(vh.getAdapterPosition()).getFileName(), data.get(vh.getAdapterPosition()).getFileApp());
+                if (data.get(vh.getAdapterPosition()).getFileApp().equals(Constants.Qsirch))
+                    openFileWithMMM(mContext, data.get(vh.getAdapterPosition()).getFileName());
+                else
+                    openFile(mContext, data.get(vh.getAdapterPosition()).getFileName(), data.get(vh.getAdapterPosition()).getFileApp());
             }
         });
 

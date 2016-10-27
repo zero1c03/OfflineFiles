@@ -38,6 +38,7 @@ import com.example.weber.qsirch_offlinefiles.R;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import activity.MainActivity;
@@ -46,6 +47,8 @@ import model.FileSearchModel;
 import preview.IconPreview;
 import utils.QnapAppFolder;
 import utils.SimpleUtils;
+import utils.Constants;
+
 import com.qnap.medialibrary.video.VideoActivity;
 
 /**
@@ -64,17 +67,17 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
     private LinearLayoutManager mLinearLayoutManager;
 
     private ArrayList<FileSearchModel> mDatas;
+    private HashMap<String, String> QnapAppFolder;
 
     private ImageView mSortButton;
     private TextView mSortType;
 
-    public FilesearchFragment() {
-
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle.getSerializable("QnapAppFolder") != null)
+            this.QnapAppFolder = (HashMap<String, String>) bundle.getSerializable("QnapAppFolder");
     }
 
     @Override
@@ -232,7 +235,12 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
             ArrayList<String[]> SearchResult = new ArrayList<>();
 
             for (int app = 0; app < QnapApp.size(); app++) {
-                String location = Environment.getExternalStorageDirectory().toString() + "/" + QnapApp.get(app)[0];
+                String location = "";
+                if (QnapApp.get(app)[1] == Constants.Qfile && QnapAppFolder.get(Constants.Qfile) != null) {
+                    location = QnapAppFolder.get(Constants.Qfile);
+                } else {
+                    location = Environment.getExternalStorageDirectory().toString() + "/" + QnapApp.get(app)[0];
+                }
                 SearchArray = SimpleUtils.searchInDirectory(location, params[0]);
 
                 for (int searchresult = 0; searchresult < SearchArray.size(); searchresult++) {
@@ -297,8 +305,8 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
     // Scan Qnap app
     public ArrayList<String[]> CheckQnapApp() {
         ArrayList<String[]> QnapApp = new ArrayList<>();
-        String[] QNAPFileName = {"Qfile", "Qmusic", "Qvideo", "Qphoto"};
-        String[] QNAPPackageName = {"com.qnap.qfile", "com.qnap.qmusic", "com.qnap.qvideo", "com.qnap.qphoto", "com.qnap.qmarket"};
+        String[] QNAPFileName = Constants.QnapApp;
+        String[] QNAPPackageName = {Constants.Qfile, Constants.Qmusic, Constants.Qvideo, Constants.Qphoto, Constants.Qsirch};
         PackageManager packageManager = getActivity().getPackageManager();
 
 

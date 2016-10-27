@@ -29,6 +29,9 @@
                 android:resource="@xml/searchable" />
         </activity>
 
+        <activity android:name="com.qnap.medialibrary.video.VideoActivity" />
+        <activity android:name="com.qnap.medialibrary.multimedia.MultiMediaViewPagerActivity" />
+
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
