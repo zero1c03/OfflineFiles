@@ -109,6 +109,10 @@ public class FileSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     // If return 0, it will show nothing.
     @Override
     public int getItemCount() {
+        if (data.size() == 0)
+            filesearchFragment.ControlResultButton(true);
+        else
+            filesearchFragment.ControlResultButton(false);
         return data.size();
     }
 

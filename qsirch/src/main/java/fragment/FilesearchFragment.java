@@ -123,7 +123,8 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView.setIconifiedByDefault(false);
-
+        // Set Searchview width
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -290,6 +291,13 @@ public class FilesearchFragment extends Fragment implements View.OnClickListener
                 mDivider.draw(c);
             }
         }
+    }
+
+    public void ControlResultButton(boolean isempty) {
+        if (isempty == true)
+            mSortButton.setOnClickListener(null);
+        else
+            mSortButton.setOnClickListener(this);
     }
 
     // Open right Drawer

@@ -1,12 +1,17 @@
 package activity;
 
+import android.Manifest;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -67,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CheckPermission();
         setContentView(R.layout.activity_main);
         context = this;
         QnapAppFolder = new HashMap<String, String>();
@@ -127,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList.setAdapter(new ArrayAdapter<String>(context,
                 R.layout.item_drawer, drawerAdapter.functionName));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
 
         // Inflate a menu to be displayed in the toolbar
         setSupportActionBar(toolbar);
@@ -209,12 +216,51 @@ public class MainActivity extends AppCompatActivity {
         QfileFolderRecever = new GetQfileFolderRecever();
         IntentFilter GetQfileFolderFilter = new IntentFilter(Constants.RECEVER_GET_QFILE_DOWNLOADFOLDER);
         registerReceiver(QfileFolderRecever, GetQfileFolderFilter);
-        // Add Toast.
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
 
-//        Intent intent1 = new Intent(Constants.RECEVER_GET_QFILE_DOWNLOADFOLDER);
-//        intent1.putExtra("appDownloadFolderPath","/Qfile");
-//        sendBroadcast(intent1);
+    private void CheckPermission() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE},
+                        Constants.REQUEST_READWRITE_STORAGE);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case Constants.REQUEST_READWRITE_STORAGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+        }
+
     }
 
     // Qfile Folder Broadcast Revever
@@ -224,7 +270,6 @@ public class MainActivity extends AppCompatActivity {
             String message = "get Qfile folder : ";
             if (intent.getStringExtra("appDownloadFolderPath") != null) {
                 QnapAppFolder.put(Constants.Qfile, intent.getStringExtra("appDownloadFolderPath"));
-                // Add Toast.
                 Toast.makeText(context, message + intent.getStringExtra("appDownloadFolderPath"), Toast.LENGTH_SHORT).show();
             }
         }
